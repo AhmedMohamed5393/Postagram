@@ -1,0 +1,63 @@
+<%- include ('../partials/header') %>
+<div class="container">
+  <div class="d-flex justify-content-center m-3">
+    <div class="spinner-border text-primary" 
+         id="spinner" role="status"> 
+      <span class="sr-only">Loading...</span> 
+    </div>
+  </div>
+  <div class="container invisible" id="data">
+    <div class="card m-2 p-2">
+        <i class="fa fa-user-circle w-25 h-25"></i>
+        <a href="/user/<%= user._id %>/profile" class="text-decoration-none">
+          <h3 class="text-center"><%= user.name %></h3>
+        </a>
+        <p class="text-center"><%= user.email %></p>
+        <p class="text-center"><%= user.address %></p>
+    </div>
+    <% if(posts.length > 0){
+      posts.forEach(post => { %>
+        <div class="card col-xl-8 col-lg-8 col-md-8 col-sm-10 col-xs-10 col-12">
+          <div class="card-body">
+              <div class="row">
+                <a href="/user/<%= user._id %>/profile" class="text-decoration-none">
+                  <h4 class="card-title text-center"><%= user.name %></h4>
+                </a>
+              </div>
+              <div class="row main">
+                <small class="text-black-50 text-center">
+                  <%= time[posts.indexOf(post)] %>
+                </small>
+              </div>
+              <div class="row mt-3">
+                <h4 class="card-subtitle"><%= post.title %></h4>
+              </div>
+              <div class="card-text m-3">
+                <p class="text-start"><%= post.content %></p>
+              </div>
+              <% if(post.user.equals(currentUser._id)){ %>
+                <hr class="col-*-10">
+                <form action="/post/<%= post._id %>?_method=DELETE"
+                      method="post" class="form-group">
+                  <a class="btn btn-warning" href="/post/<%= post._id %>/edit">
+                    Edit
+                  </a>
+                  <button type="submit" class="btn btn-danger">
+                    Delete
+                  </button>
+                </form>
+              <% } %>          
+          </div>
+        </div>
+      <% });
+    }else{ %>
+      <div class="row d-flex justify-content-center m-2">
+        <p class="text-center font-weight-bolder text-info"
+           style="font-size: 24px;">
+           You haven't make any posts yet!
+        </p>
+      </div>
+    <% } %>
+  </div>
+</div>
+<%- include ('../partials/footer') %>

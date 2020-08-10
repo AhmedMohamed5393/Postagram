@@ -1,0 +1,83 @@
+<%- include ('../partials/header') %>
+<div class="row d-flex justify-content-center m-2">
+  <%- include ('../partials/messages') %>
+  <div id="success" class="alert alert-success alert-dismissible fade show
+                           <% if(noMessages){ %>invisible<% } %>">
+      <%= successMgs %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <% if(noMatch !== null){ %>
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+      <p class="text-center"><%= noMatch %></p>
+      <button type="button" class="close"
+              data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <% } %>
+</div>
+<div class="d-flex justify-content-center m-3">
+  <div class="spinner-border text-primary" 
+      id="spinner" role="status"> 
+      <span class="sr-only">Loading...</span> 
+  </div>
+</div>
+<div class="container invisible" id="data">
+  <div class="row d-flex justify-content-center">
+    <div class="btn-group col-xl-6 col-lg-6 col-md-8 col-sm-10 col-xs-12 col-12"
+         role="group" aria-label="Basic example">
+      <a class="btn btn-primary" href="/post/new">New Post</a>
+      <a class="btn btn-primary" href="/">Published</a>
+    </div>
+  </div>
+  <% if(posts){
+    posts.forEach(post => { %>
+      <div class="card col-xl-6 col-lg-6 col-md-8 col-sm-10 col-xs-10 col-12 m-2"
+           id="post">
+        <div class="card-body">
+            <div class="row">
+              <a href="/user/<%= post.user %>/profile"
+                 class="text-decoration-none">
+                 <h4 class="card-title"><%= posters[posts.indexOf(post)] %></h4>
+              </a>              
+            </div>
+            <div class="row">
+              <small class="text-black-50 text-center">
+                <%= time[posts.indexOf(post)] %>
+              </small>
+            </div>
+            <div class="card-text m-3">
+              <div class="row">
+                <h4 class="card-subtitle"><%= post.title %></h4>
+              </div>
+              <div class="card-text m-3">
+                <p class="text-start"><%= post.content %></p>
+              </div>
+            </div>
+            <% if(currentUser._id.equals(post.user)){ %>
+              <hr class="col-*-10">
+              <form action="/post/<%= post._id %>?_method=DELETE"
+                    method="post" class="form-group">
+                <a class="btn btn-warning" href="/post/<%= post._id %>/edit">
+                  Edit
+                </a>
+                <button type="submit" class="btn btn-danger">
+                  Delete
+                </button>
+              </form>
+            <% } %>              
+        </div>
+      </div>
+    <% });
+  }else{ %>
+    <div class="row d-flex justify-content-center m-2">
+      <p class="text-center font-weight-bolder text-info"
+         style="font-size: 24px;">
+         No posts haven't made yet!
+      </p>
+    </div>
+  <% } %>
+</div>
+<%- include ('../partials/footer') %>
