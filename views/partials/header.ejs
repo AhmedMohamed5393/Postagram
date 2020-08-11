@@ -21,33 +21,38 @@
 <body class="invisible" id="data">
     <nav class="navbar navbar-expand-lg navbar-dark col-*-12"
          style="background-color: rgb(69, 15, 218);">
+      <a class="navbar-brand" href='/'>Postagram</a>
       <button class="navbar-toggler" type="button"
               data-toggle="collapse" data-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent" aria-expanded="false"
               aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand ml-xl-5 ml-lg-4 ml-md-3 ml-sm-0 ml-xs-0" href='/'>
-          Postagram
-      </a>
-      <% if(!login){ %>
-        <a class="nav-link text-decoration-none" href="/user/login">
-          <i class="fa fa-sign-in-alt text-light" aria-hidden="true"></i>
-        </a>
-      <% }else{ %>
-        <a class="nav-link text-decoration-none text-warning"
-           href="/user/<%= currentUser._id %>/profile">
-          <i class="fa fa-user text-warning" aria-hidden="true"></i>
-          <%= currentUser.name %>
-        </a>
-        <a class="nav-link text-decoration-none" href="/user/logout">
-          <i class="fa fa-sign-out-alt text-warning" aria-hidden="true"></i>
-        </a>  
-      <% } %>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto"></ul>
+        <ul class="navbar-nav mr-auto">
+          <% if(!login){ %>
+            <li class="nav-item">
+              <a class="nav-link text-decoration-none" href="/user/login">
+                <i class="fa fa-sign-in-alt text-light" aria-hidden="true"></i>
+              </a>
+            </li>
+          <% }else{ %>
+            <li class="nav-item">
+              <a class="nav-link text-decoration-none text-warning"
+                 href="/user/<%= currentUser._id %>/profile">
+                <i class="fa fa-user text-warning" aria-hidden="true"></i>
+                <%= currentUser.name %>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-decoration-none" href="/user/logout">
+                <i class="fa fa-sign-out-alt text-warning" aria-hidden="true"></i>
+              </a>
+            </li>  
+          <% } %>
+        </ul>
         <form class="form-inline my-2 my-lg-0" action="/" method="get">
-          <div class="row main">
+          <div class="row main ml-sm-1 ml-xs-1">
             <input class="form-control mr-sm-2" type="text" id="search"
                    name="search" placeholder="Search" aria-label="Search">
             <button type="reset" class="close mr-3" aria-label="Close" id="clear"
