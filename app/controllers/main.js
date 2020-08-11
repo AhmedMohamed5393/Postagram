@@ -6,11 +6,7 @@ module.exports = {
         var messages   = req.flash('error'),
             noMatch    = null,
             successMgs = req.flash('success')[0],
-            posts1     = [],
-            posts2     = [],
-            array1     = [],
             time1      = [],
-            array2     = [],
             time2      = [];
         if(req.query.search){
             try {
@@ -28,24 +24,15 @@ module.exports = {
                           "No posts or users match that query," + 
                           "please try again.";
                     }
-                    User.find()
-                    .then(posters => {
-                        var i = 0;
+                    User.find().then(posters => {
                         foundposts.forEach(foundpost => {
-                            posts1.push(foundpost.user);
                             time1.push(
                                 functions
                                  .datesubtraction(Date.now(), foundpost.publish)
                             );
                         });
-                        posters.forEach(poster => {
-                            if(posts1[i] == poster._id){
-                                array1.push(poster.name);
-                                i++;
-                            }
-                        });
                         res.render('pages/home', {
-                            posters: array1,
+                            posters: posters,
                             posts: foundposts,
                             time: time1,
                             noMatch: noMatch,
@@ -64,35 +51,27 @@ module.exports = {
             }
         }else{
             Post.find().then(posts => {
-                User.find().then(posters => {
-                    if(posts){
-                        var i = 0;
-                        posts.forEach(post => {
-                            posts2.push(post.user);
-                            time2.push(
-                                functions
-                                 .datesubtraction(Date.now(), post.publish)
-                            );
-                        });
-                        posters.forEach(poster => {
-                            if(poster._id.equals(posts2[i])){
-                                array2.push(poster.name);
-                                i++;
-                            }
-                        });
-                    }
-                    res.render('pages/home' , {
-                        posters: array2,
-                        posts: posts,
-                        time: time2,
-                        noMatch: noMatch,
-                        successMgs: successMgs,
-                        noMessages: !successMgs,
-                        messages: messages
+                if(posts){
+                    posts.forEach(post => {
+                        time2.push(
+                            functions
+                             .datesubtraction(Date.now(), post.publish)
+                        );
                     });
-                }).catch(e => {
-                    throw e;
-                });
+                    User.find().then(posters => {
+                        res.render('pages/home' , {
+                            posters: posters,
+                            posts: posts,
+                            time: time2,
+                            noMatch: noMatch,
+                            successMgs: successMgs,
+                            noMessages: !successMgs,
+                            messages: messages
+                        });
+                    }).catch(e => {
+                        throw e;
+                    });
+                }
             }).catch(error => {
                 throw error;
             });

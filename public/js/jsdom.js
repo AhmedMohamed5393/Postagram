@@ -6,11 +6,6 @@ $(document).ready(function(){
       });
 	});
 });
-// $(document).ready(function(){
-// 	$("#clear").on('focus', function(){
-// 		$("#search").reset();
-// 	});
-// });
 const api_url = "https://mygfgapi.free.beeceptor.com/my/api/path";
 async function getapi(url) { 
 	const response = await fetch(url); 

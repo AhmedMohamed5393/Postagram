@@ -27,11 +27,7 @@ var mongoose = require('mongoose'),
         startdate: {
             type: Date,
             required: true
-        },
-        posts:[{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Post"
-        }]
+        }
     }),
     User     = mongoose.model('User' , user , 'user');
 db.once('open' , () => { console.log('connection with user is succeeded') });

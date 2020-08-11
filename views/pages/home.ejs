@@ -24,7 +24,7 @@
       <span class="sr-only">Loading...</span> 
   </div>
 </div>
-<div class="container invisible" id="data">
+<div class="container">
   <div class="row d-flex justify-content-center">
     <div class="btn-group col-xl-6 col-lg-6 col-md-8 col-sm-10 col-xs-12 col-12"
          role="group" aria-label="Basic example">
@@ -37,11 +37,39 @@
       <div class="card col-xl-6 col-lg-6 col-md-8 col-sm-10 col-xs-10 col-12 m-2"
            id="post">
         <div class="card-body">
-            <div class="row">
+            <div class="row main">
               <a href="/user/<%= post.user %>/profile"
                  class="text-decoration-none">
-                 <h4 class="card-title"><%= posters[posts.indexOf(post)] %></h4>
-              </a>              
+                 <h4 class="card-title">
+                   <% posters.forEach(poster => {
+                     if(poster._id.equals(post.user)){ %>
+                      <i class="fa fa-user-circle"></i>
+                      <%= poster.name %>
+                     <% }
+                   }); %>
+                 </h4>
+              </a>
+              <% if(currentUser._id.equals(post.user)){ %>
+                <div class="dropdown mr-auto">
+                  <button class="btn btn-light" type="button"
+                          id="dropdownMenu1" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-angle-down text-center"></i>
+                  </button>
+                  <form action="/post/<%= post._id %>?_method=DELETE"
+                        method="post">
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                      <a class="dropdown-item btn btn-warning"
+                         href="/post/<%= post._id %>/edit">
+                        Edit
+                      </a>
+                      <button type="submit" class="dropdown-item btn btn-danger">
+                        Delete
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              <% } %>
             </div>
             <div class="row">
               <small class="text-black-50 text-center">
@@ -56,18 +84,6 @@
                 <p class="text-start"><%= post.content %></p>
               </div>
             </div>
-            <% if(currentUser._id.equals(post.user)){ %>
-              <hr class="col-*-10">
-              <form action="/post/<%= post._id %>?_method=DELETE"
-                    method="post" class="form-group">
-                <a class="btn btn-warning" href="/post/<%= post._id %>/edit">
-                  Edit
-                </a>
-                <button type="submit" class="btn btn-danger">
-                  Delete
-                </button>
-              </form>
-            <% } %>              
         </div>
       </div>
     <% });

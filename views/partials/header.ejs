@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="/css/style.css">
     <title>Postagram</title>
 </head>
-<body style="font-size: 15px;">
+<body class="invisible" id="data">
     <nav class="navbar navbar-expand-lg navbar-dark col-*-12"
          style="background-color: rgb(69, 15, 218);">
       <button class="navbar-toggler" type="button"
@@ -27,15 +27,11 @@
               aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand ml-auto"
-             href='/' style="font-size: 15px;">
+      <a class="navbar-brand ml-xl-5 ml-lg-4 ml-md-3 ml-sm-0 ml-xs-0" href='/'>
           Postagram
       </a>
       <% if(!login){ %>
         <a class="nav-link text-decoration-none" href="/user/login">
-          <i class="fa fa-sign-in-alt text-light" aria-hidden="true"></i>
-        </a>
-        <a class="nav-link text-decoration-none" href="/user/signup">
           <i class="fa fa-sign-in-alt text-light" aria-hidden="true"></i>
         </a>
       <% }else{ %>
@@ -50,18 +46,18 @@
       <% } %>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto"></ul>
-        <form class="form-inline my-2 my-lg-0">
-          <div class="form-group">
+        <form class="form-inline my-2 my-lg-0" action="/" method="get">
+          <div class="row main">
             <input class="form-control mr-sm-2" type="text" id="search"
-                 name="search" placeholder="Search" aria-label="Search">
-            <button type="reset" class="close" style="margin-left: -30px;"
-                    aria-label="Close" id="clear">
+                   name="search" placeholder="Search" aria-label="Search">
+            <button type="reset" class="close mr-3" aria-label="Close" id="clear"
+                    style="margin-left: -35px;">
               <span aria-hidden="true">×</span>
             </button>
-          </div>      
-          <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">
-            Search
-          </button>
+            <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">
+              Search
+            </button>
+          </div>
         </form>
       </div>
     </nav>
