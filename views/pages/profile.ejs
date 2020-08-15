@@ -29,19 +29,21 @@
                 </a>
                 <% if(post.user.equals(currentUser._id)){ %>
                   <div class="dropdown ml-xl-5 ml-lg-5 ml-md-5">
-                    <button class="btn btn-light" type="button"
+                    <a class="w-50 h-50" type="button"
                             id="dropdownMenu1" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-angle-down text-center"></i>
-                    </button>
+                    </a>
                     <form action="/post/<%= post._id %>?_method=DELETE"
                           method="post">
                       <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <a class="dropdown-item btn btn-warning"
-                           href="/post/<%= post._id %>/edit">
-                          Edit
+                        <a data-toggle="collapse"
+                           href="#collapseExample<%= post._id %>"
+                           aria-expanded="false" class="dropdown-item"
+                           aria-controls="collapseExample">
+                           Edit
                         </a>
-                        <button type="submit" class="dropdown-item btn btn-danger">
+                        <button type="submit" class="dropdown-item">
                           Delete
                         </button>
                       </div>
@@ -49,9 +51,9 @@
                   </div>
                 <% } %>
               </div>
-              <div class="row main">
+              <div class="row ml-1">
                 <small class="text-black-50 text-center">
-                  <%= time[posts.indexOf(post)] %>
+                  <%= posttime[posts.indexOf(post)] %>
                 </small>
               </div>
               <div class="row mt-3">
@@ -59,7 +61,139 @@
               </div>
               <div class="card-text m-3">
                 <p class="text-start"><%= post.content %></p>
-              </div>          
+              </div>
+              <div class="collapse" id="collapseExample<%= post._id %>">
+                <form action="/post/<%= post._id %>?_method=put"
+                      method="post" class="form-group">
+                  <div class="form-group">
+                    <input type="text" name="title" id="content"
+                         class="form-control" value="<%= post.title %>">
+                  </div>
+                  <div class="form-group">
+                    <textarea name="content" id="content"
+                              class="form-control w-100" rows="3">
+                      <%= post.content %>
+                    </textarea>
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" class="btn btn-warning"
+                         value="Update Post">
+                  </div>
+                  <div class="form-group">
+                    <a href="javascript:history.back()"
+                       class="btn btn-primary">
+                      Cancel
+                    </a>
+                  </div>
+                </form>
+              </div>
+              <form action="/comment/<%= post._id %>" method="post"
+                    class="form-group">
+                <hr class="col-*-10">
+                <button class="btn btn-light collapsed w-100" type="button"
+                        data-toggle="collapse"
+                        data-target="#collapseExample<%= posts.indexOf(post) %>"
+                        aria-expanded="false"
+                        aria-controls="collapseExample<%= posts.indexOf(post) %>">
+                  <i class="far fa-comments"></i> Comments
+                </button>            
+                <hr class="col-*-10">
+                <div class="form-group row main">
+                  <a href="/user/<%= currentUser._id %>/profile"
+                     class="text-decoration-none">
+                    <h5 class="text-center">
+                      <i class="fa fa-user-circle"></i>
+                      <%= currentUser.name %>
+                    </h5>
+                  </a>
+                </div>
+                <div class="row main">
+                  <div class="form-group mr-1">
+                    <input type="text" name="content"
+                           class="form-control"
+                           id="comment" placeholder="Write your comment ...">
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary">
+                      Send
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <div class="collapse" id="collapseExample<%= posts.indexOf(post) %>">
+                <ul class="list-group">
+                  <% comments.forEach(comment => { %>
+                    <% if(comment.post.equals(post._id)){ %>
+                      <li class="list-group-item">
+                        <div class="row main">
+                          <a href="/user/<%= comment.user %>/profile"
+                            class="text-decoration-none">
+                           <h5 class="card-subtitle">
+                             <% users.forEach(user => {
+                               if(comment.user.equals(user._id)){ %>
+                                <i class="fa fa-user-circle"></i>
+                                <%= user.name %>
+                               <% }
+                             }); %>
+                           </h5>
+                          </a>
+                          <% if(currentUser._id.equals(comment.user)){ %>
+                            <div class="dropdown ml-xl-5 ml-lg-5 ml-md-5">
+                              <a class="w-50 h-50" type="button"
+                                      id="dropdownMenu1" data-toggle="dropdown"
+                                      aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-angle-down text-center"></i>
+                              </a>
+                              <form action="/comment/<%= comment._id %>?_method=DELETE"
+                                    method="post">
+                                <div class="dropdown-menu"
+                                     aria-labelledby="dropdownMenu1">
+                                  <a data-toggle="collapse"
+                                     href="#collapseExample<%= comment._id %>"
+                                     aria-expanded="false" class="dropdown-item"
+                                     aria-controls="collapseExample">
+                                    Edit
+                                  </a>
+                                  <button type="submit" 
+                                          class="dropdown-item">
+                                    Delete
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          <% } %>
+                        </div>
+                        <div class="row ml-1">
+                          <small class="text-black-50 text-center">
+                            <%= commenttime[comments.indexOf(comment)] %>
+                          </small>
+                        </div>
+                        <p class="text-start"><%= comment.content %></p>
+                        <div class="collapse" id="collapseExample<%= comment._id %>">
+                          <form action="/comment/<%= comment._id %>?_method=put"
+                                method="post" class="form-group">
+                            <div class="form-group">
+                              <input type="text" name="content" id="content"
+                                     class="form-control"
+                                     value="<%= comment.content %>">
+                            </div>
+                            <div class="form-group">
+                              <input type="submit" class="btn btn-warning"
+                                     value="Update Comment">
+                            </div>
+                            <div class="form-group">
+                              <a href="javascript:history.back()"
+                                 class="btn btn-primary">
+                                Cancel
+                              </a>
+                            </div>
+                          </form>
+                        </div>
+                      </li>
+                    <% } %>
+                  <% }); %>
+                </ul>
+              </div>
           </div>
         </div>
       <% });

@@ -1,13 +1,16 @@
 var User      = require('../models/user'),
     Post      = require('../models/post'),
+    Comment   = require('../models/comment'),
     functions = require('../middlewares/functions');
 module.exports = {
     GetHomePage: (req , res) => {
-        var messages   = req.flash('error'),
-            noMatch    = null,
-            successMgs = req.flash('success')[0],
-            time1      = [],
-            time2      = [];
+        var messages     = req.flash('error'),
+            noMatch      = null,
+            successMgs   = req.flash('success')[0],
+            posttime1    = [],
+            posttime2    = [],
+            commenttime1 = [],
+            commenttime2 = [];
         if(req.query.search){
             try {
                 var input  = new RegExp(
@@ -26,19 +29,32 @@ module.exports = {
                     }
                     User.find().then(posters => {
                         foundposts.forEach(foundpost => {
-                            time1.push(
+                            posttime1.push(
                                 functions
                                  .datesubtraction(Date.now(), foundpost.publish)
                             );
                         });
-                        res.render('pages/home', {
-                            posters: posters,
-                            posts: foundposts,
-                            time: time1,
-                            noMatch: noMatch,
-                            successMgs: 'Search has been done successfully',
-                            noMessages: null,
-                            messages: null
+                        Comment.find().then(comments => {
+                            comments.forEach(comment => {
+                                commenttime1.push(
+                                    functions
+                                     .datesubtraction(Date.now(), comment.publish)
+                                );
+                            });
+                            res.render('pages/home' , {
+                                posters: posters,
+                                posts: foundposts,
+                                posttime: posttime1,
+                                commenttime: commenttime1,
+                                comments: comments,
+                                noMatch: noMatch,
+                                successMgs: successMgs,
+                                noMessages: !successMgs,
+                                messages: messages
+                            });
+                        }).catch(comerror  => {
+                            req.flash('error_msg', 'There is something wrong');
+                            res.redirect('/');
                         });
                     }).catch(error => {
                         throw error;
@@ -53,23 +69,36 @@ module.exports = {
             Post.find().then(posts => {
                 if(posts){
                     posts.forEach(post => {
-                        time2.push(
+                        posttime2.push(
                             functions
                              .datesubtraction(Date.now(), post.publish)
                         );
                     });
-                    User.find().then(posters => {
-                        res.render('pages/home' , {
-                            posters: posters,
-                            posts: posts,
-                            time: time2,
-                            noMatch: noMatch,
-                            successMgs: successMgs,
-                            noMessages: !successMgs,
-                            messages: messages
+                    Comment.find().then(comments => {
+                        comments.forEach(comment => {
+                            commenttime2.push(
+                                functions
+                                 .datesubtraction(Date.now(), comment.publish)
+                            );
                         });
-                    }).catch(e => {
-                        throw e;
+                        User.find().then(posters => {
+                            res.render('pages/home' , {
+                                posters: posters,
+                                posts: posts,
+                                posttime: posttime2,
+                                commenttime: commenttime2,
+                                comments: comments,
+                                noMatch: noMatch,
+                                successMgs: successMgs,
+                                noMessages: !successMgs,
+                                messages: messages
+                            });
+                        }).catch(e => {
+                            throw e;
+                        });
+                    }).catch(comerror  => {
+                        req.flash('error_msg', 'There is something wrong');
+                        res.redirect('/');
                     });
                 }
             }).catch(error => {

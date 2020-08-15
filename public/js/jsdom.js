@@ -19,3 +19,6 @@ function hideSpinner() {
 	document.getElementById('spinner') 
 			.style.display = 'none'; 
 }
+function change(mode){
+	return mode;
+}

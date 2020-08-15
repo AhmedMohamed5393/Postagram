@@ -1,20 +1,41 @@
 var User      = require('../../models/user'),
     Post      = require('../../models/post'),
+    Comment   = require('../../models/comment'),
     functions = require('../../middlewares/functions');
 module.exports = {
     GetUserProfile: (req , res) => {
         User.findById(req.params.id).then(userinfo => {
-            var messages = req.flash('error'),
-                time     = [];
+            var messages    = req.flash('error'),
+                posttime    = [],
+                commenttime = [];
             Post.find({ user: req.params.id }).then(posts => {
                 posts.forEach(post => {
-                    time.push(functions.datesubtraction(Date.now(), post.publish));
+                    posttime.
+                      push(functions.datesubtraction(Date.now(), post.publish));
                 });
-                res.render('pages/profile' , {
-                    user: userinfo,
-                    posts: posts,
-                    time: time,
-                    messages: messages
+                Comment.find().then(comments => {
+                    comments.forEach(comment => {
+                        commenttime.push(
+                            functions.datesubtraction(Date.now(), comment.publish)
+                        );
+                    });
+                    User.find().then(users => {
+                        res.render('pages/profile' , {
+                            user: userinfo,
+                            users: users,
+                            posts: posts,
+                            comments: comments,
+                            posttime: posttime,
+                            commenttime: commenttime,
+                            messages: messages
+                        });
+                    }).catch(errors => {
+                        req.flash('error_msg', 'There is something wrong');
+                        res.redirect('/');
+                    });
+                }).catch(comerror  => {
+                    req.flash('error_msg', 'There is something wrong');
+                    res.redirect('/');
                 });
             }).catch(error => {
                 throw error;

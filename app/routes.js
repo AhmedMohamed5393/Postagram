@@ -1,16 +1,18 @@
-var express           = require('express'),
-    router            = express.Router(),
-    bodyParser        = require('body-parser'),
-    parseUrlencoded   = bodyParser.urlencoded({ extended: true }),
-    methodOverride    = require('method-override'),
-    authentication    = require('./middlewares/authentication'),
-    authorization     = require('./middlewares/authorization'),
-    signupcontroller  = require('./controllers/user/signup'),
-    signincontroller  = require('./controllers/user/login'),
-    profilecontroller = require('./controllers/user/profile'),
-    maincontroller    = require('./controllers/main'),
-    createcontroller  = require('./controllers/post/create'),
-    updatecontroller  = require('./controllers/post/update');
+var express            = require('express'),
+    router             = express.Router(),
+    bodyParser         = require('body-parser'),
+    parseUrlencoded    = bodyParser.urlencoded({ extended: true }),
+    methodOverride     = require('method-override'),
+    authentication     = require('./middlewares/authentication'),
+    authorization      = require('./middlewares/authorization'),
+    signupcontroller   = require('./controllers/user/signup'),
+    signincontroller   = require('./controllers/user/login'),
+    profilecontroller  = require('./controllers/user/profile'),
+    maincontroller     = require('./controllers/main'),
+    cpostcontroller    = require('./controllers/post/create'),
+    upostcontroller    = require('./controllers/post/update'),
+    ccommentcontroller = require('./controllers/comment/create'),
+    ucommentcontroller = require('./controllers/comment/update');
 router.use(methodOverride('_method'));
 router.use('/user/login', parseUrlencoded, authentication.notLoggedIn,
                                            authentication.checkNotLogged);
@@ -29,16 +31,21 @@ router.get('/user/login', parseUrlencoded, authentication.notLoggedIn,
                                            signincontroller.GetSignInPage);
 router.post('/user/login', parseUrlencoded, signincontroller.PostSignInPage);
 router.get('/post/new', parseUrlencoded, authentication.isLoggedIn,
-                                         createcontroller.showCreation);
+                                         cpostcontroller.showCreation);
 router.post('/', parseUrlencoded, authentication.isLoggedIn,
-                                  createcontroller.createPost);
-router.get('/post/:id/edit', parseUrlencoded, authentication.isLoggedIn,
-                                              authorization.checkPostOwnership,
-                                              updatecontroller.showEdition);
+                                  cpostcontroller.createPost);
 router.put('/post/:id', parseUrlencoded, authentication.isLoggedIn,
                                          authorization.checkPostOwnership,
-                                         updatecontroller.UpdatePost);
+                                         upostcontroller.UpdatePost);
 router.delete('/post/:id', parseUrlencoded, authentication.isLoggedIn,
                                             authorization.checkPostOwnership,
-                                            updatecontroller.DeletePost);
+                                            upostcontroller.DeletePost);
+router.post('/comment/:id', parseUrlencoded, authentication.isLoggedIn,
+                                             ccommentcontroller.createComment);
+router.put('/comment/:id', parseUrlencoded, authentication.isLoggedIn,
+                                            authorization.checkCommentOwnership,
+                                            ucommentcontroller.UpdateComment);
+router.delete('/comment/:id', parseUrlencoded, authentication.isLoggedIn,
+                                               authorization.checkCommentOwnership,
+                                               ucommentcontroller.DeleteComment);
 module.exports = router;
