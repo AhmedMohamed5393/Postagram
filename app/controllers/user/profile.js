@@ -8,12 +8,12 @@ module.exports = {
             var messages    = req.flash('error'),
                 posttime    = [],
                 commenttime = [];
-            Post.find({ user: req.params.id }).then(posts => {
+            Post.find({ user: req.params.id }).sort({'publish': -1}).then(posts => {
                 posts.forEach(post => {
                     posttime.
                       push(functions.datesubtraction(Date.now(), post.publish));
                 });
-                Comment.find().then(comments => {
+                Comment.find().sort({'publish': -1}).then(comments => {
                     comments.forEach(comment => {
                         commenttime.push(
                             functions.datesubtraction(Date.now(), comment.publish)

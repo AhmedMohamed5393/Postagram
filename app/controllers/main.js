@@ -21,7 +21,7 @@ module.exports = {
                         { title: input },
                         { content: input }
                     ]
-                }).then(foundposts => {
+                }).sort({'publish': -1}).then(foundposts => {
                     if(!foundposts){
                         noMatch = 
                           "No posts or users match that query," + 
@@ -34,7 +34,7 @@ module.exports = {
                                  .datesubtraction(Date.now(), foundpost.publish)
                             );
                         });
-                        Comment.find().then(comments => {
+                        Comment.find().sort({'publish': -1}).then(comments => {
                             comments.forEach(comment => {
                                 commenttime1.push(
                                     functions
@@ -66,7 +66,7 @@ module.exports = {
                 throw err;
             }
         }else{
-            Post.find().then(posts => {
+            Post.find().sort({'publish': -1}).then(posts => {
                 if(posts){
                     posts.forEach(post => {
                         posttime2.push(
@@ -74,7 +74,7 @@ module.exports = {
                              .datesubtraction(Date.now(), post.publish)
                         );
                     });
-                    Comment.find().then(comments => {
+                    Comment.find().sort({'publish': -1}).then(comments => {
                         comments.forEach(comment => {
                             commenttime2.push(
                                 functions
