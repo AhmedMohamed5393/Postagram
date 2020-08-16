@@ -34,7 +34,7 @@ module.exports = {
                                  .datesubtraction(Date.now(), foundpost.publish)
                             );
                         });
-                        Comment.find().sort({'publish': 1}).then(comments => {
+                        Comment.find().then(comments => {
                             comments.forEach(comment => {
                                 commenttime1.push(
                                     functions
@@ -74,7 +74,7 @@ module.exports = {
                              .datesubtraction(Date.now(), post.publish)
                         );
                     });
-                    Comment.find().sort({'publish': 1}).then(comments => {
+                    Comment.find().then(comments => {
                         comments.forEach(comment => {
                             commenttime2.push(
                                 functions

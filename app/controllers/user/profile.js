@@ -13,7 +13,7 @@ module.exports = {
                     posttime.
                       push(functions.datesubtraction(Date.now(), post.publish));
                 });
-                Comment.find().sort({'publish': 1}).then(comments => {
+                Comment.find().then(comments => {
                     comments.forEach(comment => {
                         commenttime.push(
                             functions.datesubtraction(Date.now(), comment.publish)
