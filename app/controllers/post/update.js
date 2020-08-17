@@ -5,7 +5,7 @@ module.exports = {
         var messages = req.flash('error');
         Post.findById(req.params.id).then(editPost => {
             User.findOne({ _id: editPost.user }).then(poster => {
-                res.render('pages/edit', {
+                res.render('pages/home', {
                     post: editPost,
                     poster: poster.name,
                     messages: messages
@@ -32,7 +32,7 @@ module.exports = {
             res.redirect('/');
         }).catch(err => {
             errors.push({ msg: 'Sorry! editing process is failed' });
-            res.render('pages/edit' , {
+            res.render('pages/home' , {
                 errors, content, title
             });
         });
